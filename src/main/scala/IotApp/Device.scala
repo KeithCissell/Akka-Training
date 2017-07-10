@@ -8,6 +8,9 @@ object Device {
 
   def props(groupId: String, deviceId: String): Props = Props(new Device(groupId, deviceId))
 
+  final case class RequestTrackDevice(groupId: String, deviceId: String)
+  case object DeviceRegistered
+
   final case class RecordTemperature(requestId: Long, value: Double)
   final case class TemperatureRecorded(requestId: Long)
 
@@ -24,6 +27,15 @@ class Device(groupId: String, deviceId: String) extends Actor with ActorLogging 
   override def postStop(): Unit = log.info("Device actor {}-{} stopped", groupId, deviceId)
 
   override def receive: Receive = {
+    case RequestTrackDevice(`groupId`, `deviceId`) =>
+      sender() ! DeviceRegistered
+
+    case RequestTrackDevice(groupId, deviceId) =>
+      log.warning(
+        "Ignoring TrackDevice request for {}-{}.This actor is responsible for {}-{}.",
+        groupId, deviceId, this.groupId, this.deviceId
+      )
+
     case RecordTemperature(id, value) =>
       log.info("Recorded temperature reading {} with {}", value, id)
       lastTemperatureReading = Some(value)
