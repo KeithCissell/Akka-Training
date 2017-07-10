@@ -3,6 +3,9 @@ package akkatutorial
 import akka.actor._
 
 object Supervising {
+
+  implicit val system = ActorSystem()
+
   class SupervisingActor extends Actor {
     val child = context.actorOf(Props[SupervisedActor], "supervised-actor")
 
@@ -23,7 +26,6 @@ object Supervising {
   }
 
   def main(args: Array[String]) {
-    val system = ActorSystem("Supervising")
     val supervisingActor = system.actorOf(Props[SupervisingActor], "supervising-actor")
     supervisingActor ! "failChild"
   }

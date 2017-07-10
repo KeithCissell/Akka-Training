@@ -5,6 +5,8 @@ import akka.actor._
 
 object StartStop {
 
+  implicit val system = ActorSystem()
+
   class StartStopActor1 extends Actor {
     override def preStart(): Unit = {
       println("first started")
@@ -27,8 +29,6 @@ object StartStop {
   }
 
   def main(args: Array[String]) {
-    val system = ActorSystem("StartStop")
-
     val first = system.actorOf(Props[StartStopActor1], "first")
     first ! "stop"
   }

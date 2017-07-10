@@ -1,4 +1,4 @@
-package akkatutorial
+package iot
 
 import akka.actor._
 import akka.actor.ActorSystem
@@ -20,8 +20,9 @@ class IotSupervisor extends Actor with ActorLogging {
 
 object IotApp {
 
+  implicit val system = ActorSystem()
+
   def main(args: Array[String]): Unit = {
-    val system = ActorSystem("iot-system")
 
     try {
       // Create top level supervisor

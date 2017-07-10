@@ -6,6 +6,8 @@ import scala.concurrent.duration._
 
 object PrintActor {
 
+  implicit val system = ActorSystem()
+
   class PrintMyActorRefActor extends Actor {
     override def receive: Receive = {
       case "printit" =>
@@ -15,8 +17,6 @@ object PrintActor {
   }
 
   def main(args: Array[String]) {
-    val system = ActorSystem("PrintActor")
-
     val firstRef = system.actorOf(Props[PrintMyActorRefActor], "first-actor")
     println(s"First : $firstRef")
     firstRef ! "printit"
